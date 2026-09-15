@@ -1,0 +1,39 @@
+{
+  "name": "multi-agents-system",
+  "version": "2.0.0",
+  "description": "AI-powered Multi-Agent Research System with Google Gemini LLM, Tavily Search, Cheerio Scraper, LangGraph Multi-Agent Orchestration, Express API, and React Frontend",
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "concurrently -n \"backend,client\" -c \"blue,magenta\" \"node src/main.js --server\" \"npm run dev --prefix client\"",
+    "start": "node src/main.js --server",
+    "server": "node src/main.js --server",
+    "client": "npm run dev --prefix client",
+    "cli": "node src/main.js",
+    "build": "npm run build --prefix client"
+  },
+  "keywords": [
+    "ai",
+    "multi-agent",
+    "langchain",
+    "langgraph",
+    "gemini",
+    "research",
+    "react-agent"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@langchain/core": "^1.2.0",
+    "@langchain/google-genai": "^2.0.0",
+    "@langchain/langgraph": "^1.0.0",
+    "@langchain/tavily": "^1.0.0",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^5.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
