@@ -1,21 +1,12 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 import { streamResearchPipeline, runResearchPipeline } from "./graph/workflow.js";
 import "./config.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-
-const clientBuildPath = path.join(__dirname, "..", "client", "dist");
-app.use(express.static(clientBuildPath));
 
 const rateLimitMap = new Map();
 
@@ -110,21 +101,33 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-app.get("/{*splat}", (req, res) => {
-  const indexPath = path.join(clientBuildPath, "index.html");
-  res.sendFile(indexPath, (err) => {
-    if (err) {
-      res.status(200).send(`
-        <h1>🤖 Multi-Agent Research System</h1>
-        <p>API is running on port ${PORT}.</p>
-        <p>Build the React frontend: <code>cd client && npm run build</code></p>
-        <p>Or run dev mode: <code>cd client && npm run dev</code></p>
-      `);
-    }
-  });
-});
+export { app };
 
-export function startServer() {
+export async function startServer() {
+  const PORT = process.env.PORT || 3001;
+
+  const path = await import("path");
+  const { fileURLToPath } = await import("url");
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const clientBuildPath = path.join(__dirname, "..", "client", "dist");
+
+  app.use(express.static(clientBuildPath));
+
+  app.get("/{*splat}", (req, res) => {
+    const indexPath = path.join(clientBuildPath, "index.html");
+    res.sendFile(indexPath, (err) => {
+      if (err) {
+        res.status(200).send(`
+          <h1>🤖 Multi-Agent Research System</h1>
+          <p>API is running on port ${PORT}.</p>
+          <p>Build the React frontend: <code>cd client && npm run build</code></p>
+          <p>Or run dev mode: <code>cd client && npm run dev</code></p>
+        `);
+      }
+    });
+  });
+
   app.listen(PORT, () => {
     console.log("\n" + "═".repeat(60));
     console.log("  🤖 Multi-Agent Research System — API Server");

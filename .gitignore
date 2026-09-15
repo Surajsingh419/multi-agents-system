@@ -4,6 +4,12 @@ node_modules/
 # Environment variables (contains API keys)
 .env
 
+# Build output
+client/dist/
+
+# Vercel
+.vercel
+
 # OS files
 .DS_Store
 Thumbs.db
@@ -15,3 +21,4 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
